@@ -1,9 +1,12 @@
 package www.testing.login_autism;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -27,6 +30,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -35,7 +39,6 @@ import java.util.Locale;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class kid_paint_interface extends AppCompatActivity {
-
     int defaultColor;
     SignatureView signatureView;
     ImageButton imgEraser,imgSave,imgColor;
@@ -43,7 +46,7 @@ public class kid_paint_interface extends AppCompatActivity {
     TextView txtPenSize;
 
     private static String filename;
-    File path = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/myPaintings");
+    File path = new File(Environment.getDataDirectory().getAbsolutePath() + "/myPaintings");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +109,18 @@ public class kid_paint_interface extends AppCompatActivity {
         imgSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+                if(ContextCompat.checkSelfPermission(kid_paint_interface.this,Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+                    try {
+                        saveImage();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    askPermission();
+                }
                 if(!signatureView.isBitmapEmpty()){
                     try {
                         saveImage();// funtion to save image
@@ -118,6 +133,8 @@ public class kid_paint_interface extends AppCompatActivity {
         });
 
     }
+
+
 
     private void saveImage() throws IOException {
         File file = new File(filename);
@@ -159,7 +176,7 @@ public class kid_paint_interface extends AppCompatActivity {
                 .withListener(new MultiplePermissionsListener() {
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
-//                        Toast.makeText(kid_paint_interface.this,"Granted", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(kid_paint_interface.this,"Granted", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
