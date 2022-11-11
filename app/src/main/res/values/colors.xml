@@ -19,4 +19,5 @@
     <color name="lightbl">#11cfe7</color>
     <color name="darkbl">#5899e3</color>
     <color name="transp">#00FFFFFF</color>
+    <color name="red">#FF0000</color>
 </resources>

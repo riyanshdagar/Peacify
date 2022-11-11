@@ -77,6 +77,7 @@ public class Peach_colour1 extends AppCompatActivity {
                     MsgModal modal = response.body();
                     chatsModalArrayList.add(new ChatsModal(modal.getCnt(),BOT_KEY));
                     chatRVAdapter.notifyDataSetChanged();
+                    chatsRV.scrollToPosition(chatsModalArrayList.size() - 1);
                 }
             }
 
